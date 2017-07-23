@@ -72,7 +72,9 @@ namespace Ballgame
 
             string outStr = "";
             if (line_score.Status == "Final" || line_score.Status == "Game Over")
-            {
+            {   
+                Console.Clear();
+                DisplayLinescore(line_score);
                 ConsoleLineFill(line_score.Status, consoleWidth);
                 ConsoleLineFill("Final boxscore should be provided soon...",consoleWidth);
             }
