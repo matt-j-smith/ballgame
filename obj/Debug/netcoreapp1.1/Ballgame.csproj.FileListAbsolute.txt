@@ -1,0 +1,16 @@
+c:\DEV\misc\ballgame-master\bin\Debug\netcoreapp1.1\Ballgame.deps.json
+c:\DEV\misc\ballgame-master\bin\Debug\netcoreapp1.1\Ballgame.runtimeconfig.json
+c:\DEV\misc\ballgame-master\bin\Debug\netcoreapp1.1\Ballgame.runtimeconfig.dev.json
+c:\DEV\misc\ballgame-master\bin\Debug\netcoreapp1.1\Ballgame.dll
+c:\DEV\misc\ballgame-master\bin\Debug\netcoreapp1.1\Ballgame.pdb
+c:\DEV\misc\ballgame-master\obj\Debug\netcoreapp1.1\Ballgame.AssemblyInfo.cs
+c:\DEV\misc\ballgame-master\obj\Debug\netcoreapp1.1\Ballgame.dll
+c:\DEV\misc\ballgame-master\obj\Debug\netcoreapp1.1\Ballgame.pdb
+c:\DEV\misc\Ballgame\bin\Debug\netcoreapp1.1\Ballgame.deps.json
+c:\DEV\misc\Ballgame\bin\Debug\netcoreapp1.1\Ballgame.runtimeconfig.json
+c:\DEV\misc\Ballgame\bin\Debug\netcoreapp1.1\Ballgame.runtimeconfig.dev.json
+c:\DEV\misc\Ballgame\obj\Debug\netcoreapp1.1\Ballgame.AssemblyInfo.cs
+c:\DEV\misc\Ballgame\obj\Debug\netcoreapp1.1\Ballgame.dll
+c:\DEV\misc\Ballgame\obj\Debug\netcoreapp1.1\Ballgame.pdb
+c:\DEV\misc\Ballgame\bin\Debug\netcoreapp1.1\Ballgame.dll
+c:\DEV\misc\Ballgame\bin\Debug\netcoreapp1.1\Ballgame.pdb
