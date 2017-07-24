@@ -65,26 +65,30 @@ namespace Ballgame
             Console.Write("(p)rev (n)ext (#)>");
         }
 
-        public static void DisplayGameData(Object stateInfo, Game game, LinescoreGame line_score)
+        public static void DisplayGameData(Object stateInfo, Game game, LinescoreGame line_score, Boxscore boxscore)
         {
             //Console.Clear();
-            DisplayLinescore(line_score);
+
 
             string outStr = "";
             if (line_score.Status == "Final" || line_score.Status == "Game Over")
             {   
+                //Console.Clear();
+                //DisplayLinescore(line_score);
+                //ConsoleLineFill(line_score.Status, consoleWidth);
+                
                 Console.Clear();
-                DisplayLinescore(line_score);
-                ConsoleLineFill(line_score.Status, consoleWidth);
-                ConsoleLineFill("Final boxscore should be provided soon...",consoleWidth);
+                Display.DisplayFinal(game, boxscore, line_score);
             }
             else if (line_score.Status == "Pre-Game" || line_score.Status == "Preview")
             {
+                DisplayLinescore(line_score);
                 outStr = string.Format("Game Starts at {0}", line_score.Time + line_score.Time_zone);
                 ConsoleLineFill(outStr, consoleWidth);
             }
             else
             {
+                DisplayLinescore(line_score);
                 outStr = line_score.Inning_state + " " + line_score.Inning;
                 ConsoleLineFill(outStr, consoleWidth);
                 DisplayStatus(line_score);
@@ -251,6 +255,21 @@ namespace Ballgame
             ConsoleLineFill(outStr, consoleWidth);
         }
 
+        public static void DisplayPreview(LinescoreGame linescore, GameCenterGame gcg)
+        {
+            DisplayHeader(linescore);
+            Console.WriteLine();
+            Console.WriteLine(gcg.Previews.Mlb.Headline.ToUpper());
+            Console.WriteLine(gcg.Previews.Mlb.Blurb);
+            Console.WriteLine();
+            Console.WriteLine(linescore.Home_team_name);
+            Console.WriteLine(gcg.Probables.Home.RosterDisplayName.ToUpper());
+            Console.WriteLine(gcg.Probables.Home.Report);
+            Console.WriteLine();
+            Console.WriteLine(linescore.Away_team_name);
+            Console.WriteLine(gcg.Probables.Away.RosterDisplayName.ToUpper());
+            Console.WriteLine(gcg.Probables.Away.Report);
+        }
         public static void DisplayHeader(LinescoreGame linescore)
         {
             FigletFont font = FigletFont.Load("fonts/CalvinS.flf");
@@ -261,7 +280,8 @@ namespace Ballgame
             header = string.Format("{0}  @  {1}", linescore.Away_team_name, linescore.Home_team_name);
             Console.WriteLine(figlet.ToAscii(header));
             
-            Console.WriteLine(linescore.Venue+", "+linescore.Location);
+            Console.WriteLine(linescore.Venue+", "+linescore.Location+": "+linescore.Time+linescore.Time_zone);
+
         }
 
         public static void ConsoleLineFill(string str, int windowWidth)

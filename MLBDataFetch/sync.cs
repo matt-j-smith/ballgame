@@ -50,6 +50,16 @@ namespace Ballgame
                 return (Boxscore)serializer.Deserialize(new StringReader(xml));
             
         }
+
+        public GameCenterGame SyncGameCenterGame(string gameDir)
+        {
+                string xml = "";
+
+                xml = GetXML(GetAPIString() + gameDir + "/gamecenter.xml");
+
+                XmlSerializer serializer = new XmlSerializer(typeof(GameCenterGame));
+                return (GameCenterGame)serializer.Deserialize(new StringReader(xml));
+        }
 /* 
         public GameEventLog SyncEventLog(string gameDir)
         {

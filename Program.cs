@@ -9,7 +9,6 @@ class Program
     {
         private static DataFetch df = new DataFetch();
         
-
         static void Main(string[] args)
         {
             
@@ -63,11 +62,15 @@ class Program
                                 {
                                     DisplayAudioMenu(game); 
                                     var autoEvent = new AutoResetEvent(false);
-                                    Timer timer = new Timer(x =>Display.DisplayGameData(x,game, df.GetLinescore(game.Game_data_directory)),autoEvent,0,30000);
+                                    Timer timer = new Timer(x =>Display.DisplayGameData(x,game, df.GetLinescore(game.Game_data_directory),df.GetBoxscore(game.Game_data_directory)),autoEvent,0,30000);
                                 }
                                 else if (game.Status=="Final")
                                 {
                                     Display.DisplayFinal(game, df.GetBoxscore(game.Game_data_directory), df.GetLinescore(game.Game_data_directory));
+                                }
+                                else if(game.Status=="Preview")
+                                {
+                                    Display.DisplayPreview(df.GetLinescore(game.Game_data_directory),df.GetGameCenterGame(game.Game_data_directory));
                                 }
                                     
 

@@ -36,6 +36,10 @@ namespace Ballgame
             return sync.GetLineScore(gameDir);
         }
 
+        public GameCenterGame GetGameCenterGame(string gameDir)
+        {
+            return sync.SyncGameCenterGame(gameDir);
+        }
         //public List<Event> GetEvents(string gameDir)
         //{
         //    eventLog = sync.SyncEventLog(gameDir);
