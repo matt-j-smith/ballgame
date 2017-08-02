@@ -9,21 +9,16 @@ namespace Ballgame
 {
     public class DataFetch
     {
-        private Games games = new Games();
-        private Boxscore boxscore = new Boxscore();
-        private LinescoreGame linescore = new LinescoreGame();
-        //private GameEventLog eventLog = new GameEventLog();
         private Sync sync = new Sync();
 
         public DataFetch()
         {
-            //games = sync.SyncGames();
+            
         }
 
         public List<Game> GetGames(DateTime date)
         {
-            games = sync.SyncGames(date);
-            return games.Game;
+            return sync.SyncGames(date).Game;
         }
 
         public Boxscore GetBoxscore(string gameDir)
@@ -33,12 +28,17 @@ namespace Ballgame
 
         public LinescoreGame GetLinescore(string gameDir)
         {
-            return sync.GetLineScore(gameDir);
+            return sync.SyncLineScore(gameDir);
         }
 
         public GameCenterGame GetGameCenterGame(string gameDir)
         {
             return sync.SyncGameCenterGame(gameDir);
+        }
+        
+        public GameEvents GetGameEvents(string gameDir)
+        {
+            return sync.SyncGameEvents(gameDir);
         }
         //public List<Event> GetEvents(string gameDir)
         //{

@@ -22,51 +22,54 @@ class Program
             Display.DisplayGames(games,DateTime.Today);
 
             DateTime selectedDate = DateTime.Today;
-            string o = Console.ReadLine();
-            while (o != "q")
+            string i = Console.ReadLine();
+            while (i != "q")
             {
                 
-                switch (o)
+                switch (i)
                 {
                     case "p":
                         {
                             selectedDate = selectedDate.AddDays(-1);
                             games = df.GetGames(selectedDate);
                             Display.DisplayGames(games, selectedDate);
-                            o = Console.ReadLine();
+                            i = Console.ReadLine();
                             break;
                         }
                     case "n":
                         {
-                            if (selectedDate < DateTime.Today) {
+                            //if (selectedDate < DateTime.Today) {
                                 selectedDate = selectedDate.AddDays(1);
+                             //   games = df.GetGames(selectedDate);
+                            //    Display.DisplayGames(games,selectedDate);
+                            //    i = Console.ReadLine();
+                           // }
+                            //else
+                            //{
                                 games = df.GetGames(selectedDate);
                                 Display.DisplayGames(games,selectedDate);
-                                o = Console.ReadLine();
-                            }
-                            else
-                            {
-                                games = df.GetGames(selectedDate);
-                                Display.DisplayGames(games,selectedDate);
-                                o = Console.ReadLine();
-                            }
+                                i = Console.ReadLine();
+                           // }
                             break;
                         }
                     default:
                         {
                             int selection;
-                            if (Int32.TryParse(o,out selection)) {
+                            if (Int32.TryParse(i,out selection)) {
                                 game = df.GetGames(selectedDate)[selection - 1];
                                 Console.Clear();
                                 if (selectedDate==DateTime.Today && game.Status !="Final" && game.Status !="Preview")
                                 {
                                     DisplayAudioMenu(game); 
                                     var autoEvent = new AutoResetEvent(false);
-                                    Timer timer = new Timer(x =>Display.DisplayGameData(x,game, df.GetLinescore(game.Game_data_directory),df.GetBoxscore(game.Game_data_directory)),autoEvent,0,30000);
+                                    Timer timer = new Timer(x =>Display.DisplayGameData(x,game, df.GetLinescore(game.Game_data_directory),
+                                                                                                df.GetBoxscore(game.Game_data_directory),
+                                                                                                df.GetGameEvents(game.Game_data_directory),
+                                                                                                df.GetGameCenterGame(game.Game_data_directory)),autoEvent,0,30000);
                                 }
                                 else if (game.Status=="Final")
                                 {
-                                    Display.DisplayFinal(game, df.GetBoxscore(game.Game_data_directory), df.GetLinescore(game.Game_data_directory));
+                                    Display.DisplayFinal(game, df.GetBoxscore(game.Game_data_directory), df.GetLinescore(game.Game_data_directory),df.GetGameCenterGame(game.Game_data_directory));
                                 }
                                 else if(game.Status=="Preview")
                                 {
@@ -74,13 +77,13 @@ class Program
                                 }
                                     
 
-                                o = Console.ReadLine();
+                                i = Console.ReadLine();
                             }
                             else {
                                 games = df.GetGames(selectedDate);
                                 Display.DisplayGames(games,selectedDate);
                                 System.Console.WriteLine("Invalid Selection"+Environment.NewLine+">");
-                                o = Console.ReadLine();
+                                i = Console.ReadLine();
                             }
                             
                             break;

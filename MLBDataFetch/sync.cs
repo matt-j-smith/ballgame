@@ -17,48 +17,63 @@ namespace Ballgame
     {
         public Games SyncGames(DateTime date)
         {
-            string xml = "";
-
-                xml = GetXML(GetAPIString(date) + "miniscoreboard.xml");
-            
-                XmlSerializer serializer = new XmlSerializer(typeof(Games));
-
-                return (Games)serializer.Deserialize(new StringReader(xml));
-            
+            string xml = GetXML(GetAPIString(date) + "miniscoreboard.xml");
+            XmlSerializer serializer = new XmlSerializer(typeof(Games));
+            try{
+                return (Games)serializer.Deserialize(new StringReader(xml));  
+            }
+            catch{
+                return new Games();
+            }
+             
         }
 
-        internal LinescoreGame GetLineScore(string gameDir)
+        internal LinescoreGame SyncLineScore(string gameDir)
         {
-            string xml = "";
-
-                xml = GetXML(GetAPIString() + gameDir + "/linescore.xml");
-
-
-
-                XmlSerializer serializer = new XmlSerializer(typeof(LinescoreGame));
+            string xml = GetXML(GetAPIString() + gameDir + "/linescore.xml");
+            XmlSerializer serializer = new XmlSerializer(typeof(LinescoreGame)); 
+            try{
                 return (LinescoreGame)serializer.Deserialize(new StringReader(xml));
-
+            }
+            catch{
+                return new LinescoreGame();
+            }
         }
 
         public Boxscore SyncBoxscore(string gameDir)
         {
-            string xml = "";
-
-                xml = GetXML(GetAPIString() + gameDir + "/boxscore.xml");
-
-                XmlSerializer serializer = new XmlSerializer(typeof(Boxscore));
-                return (Boxscore)serializer.Deserialize(new StringReader(xml));
-            
+            string xml = GetXML(GetAPIString() + gameDir + "/boxscore.xml");
+            XmlSerializer serializer = new XmlSerializer(typeof(Boxscore));
+            try{
+               return (Boxscore)serializer.Deserialize(new StringReader(xml)); 
+            }
+            catch{
+                return new Boxscore();
+            }
         }
 
         public GameCenterGame SyncGameCenterGame(string gameDir)
         {
-                string xml = "";
-
-                xml = GetXML(GetAPIString() + gameDir + "/gamecenter.xml");
-
+                string xml = GetXML(GetAPIString() + gameDir + "/gamecenter.xml");
                 XmlSerializer serializer = new XmlSerializer(typeof(GameCenterGame));
-                return (GameCenterGame)serializer.Deserialize(new StringReader(xml));
+                try{
+                    return (GameCenterGame)serializer.Deserialize(new StringReader(xml));
+                }
+                catch{
+                    return new GameCenterGame();
+                }
+        }
+
+        public GameEvents SyncGameEvents(string gameDir)
+        {
+                string xml = GetXML(GetAPIString() + gameDir + "/game_events.xml");
+                XmlSerializer serializer = new XmlSerializer(typeof(GameEvents));
+                try{
+                    return (GameEvents)serializer.Deserialize(new StringReader(xml));
+                }
+                catch{
+                    return new GameEvents();
+                }
         }
 /* 
         public GameEventLog SyncEventLog(string gameDir)
@@ -78,7 +93,9 @@ namespace Ballgame
         {
             string root = @"http://gd2.mlb.com";
             string components = "/components/game/mlb";
+            
             if (date==DateTime.MinValue) return root;
+            
             root += components;
 
             string year = "year_" + date.Year;
@@ -90,6 +107,7 @@ namespace Ballgame
 
         private static string GetXML(string page)
         {
+            string responseString="";
             try{                
                 using (HttpClient client = new HttpClient())
                 {
@@ -98,16 +116,14 @@ namespace Ballgame
                     if (response.IsSuccessStatusCode)
                     {
                         HttpContent responseContent = response.Content; 
-                        string responseString = responseContent.ReadAsStringAsync().Result;
-
-                        return responseString;
+                        responseString = responseContent.ReadAsStringAsync().Result;
                     }
+                    return responseString;
                 }
-                return "";
             }
             catch(Exception e){
                 Console.WriteLine("Network Error: "+e.Message);
-                return "";
+                return responseString;
             }
 
         }

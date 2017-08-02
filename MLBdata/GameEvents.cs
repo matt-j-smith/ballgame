@@ -154,7 +154,7 @@ namespace Ballgame
 	}
 
 	[XmlRoot(ElementName="game")]
-	public class GameEventsGame {
+	public class GameEvents {
 		[XmlElement(ElementName="inning")]
 		public List<Inning> Inning { get; set; }
 		[XmlElement(ElementName="atBat")]

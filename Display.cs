@@ -31,7 +31,7 @@ namespace Ballgame
                 string status = g.Status;
                 if (status == "In Progress") { status = (g.Top_inning=="Y" ? "Top":"Btm") + " " +g.Inning; }
                 if (status == "Preview") { status = g.Home_time+g.Home_time_zone; }
-                //todo display completed game if final
+                
                 str = string.Format(@"[{0}]════════════════════╗", count.ToString().PadLeft(2));
                 Console.SetCursorPosition(columns, lineNo);
                 Console.Write(str);
@@ -53,9 +53,6 @@ namespace Ballgame
                 Console.Write(str);
                 lineNo++;
 
-                //Console.Write(count.ToString().PadLeft(2) + ": " + g.Away_name_abbrev.PadLeft(3) + " @ " + g.Home_name_abbrev.PadLeft(3));
-                //Console.WriteLine(" " + g.Time + " " + g.Time_zone);
-
                 count++;
                 itemCount++;
                 lineNo++;
@@ -65,7 +62,7 @@ namespace Ballgame
             Console.Write("(p)rev (n)ext (#)>");
         }
 
-        public static void DisplayGameData(Object stateInfo, Game game, LinescoreGame line_score, Boxscore boxscore)
+        public static void DisplayGameData(Object stateInfo, Game game, LinescoreGame line_score, Boxscore boxscore, GameEvents events, GameCenterGame gcg)
         {
             //Console.Clear();
 
@@ -78,7 +75,7 @@ namespace Ballgame
                 //ConsoleLineFill(line_score.Status, consoleWidth);
                 
                 Console.Clear();
-                Display.DisplayFinal(game, boxscore, line_score);
+                Display.DisplayFinal(game, boxscore, line_score, gcg);
             }
             else if (line_score.Status == "Pre-Game" || line_score.Status == "Preview")
             {
@@ -91,7 +88,7 @@ namespace Ballgame
                 DisplayLinescore(line_score);
                 outStr = line_score.Inning_state + " " + line_score.Inning;
                 ConsoleLineFill(outStr, consoleWidth);
-                DisplayStatus(line_score);
+                DisplayStatus(line_score,events);
             }
             GC.Collect();
         }
@@ -135,10 +132,18 @@ namespace Ballgame
             Console.WriteLine();
         }
 
-        public static void DisplayFinal(Game game, Boxscore boxscore, LinescoreGame l)
+        public static void DisplayFinal(Game game, Boxscore boxscore, LinescoreGame l, GameCenterGame gcg)
         {
             DisplayLinescore(l);
             string str= "";
+
+            foreach(string s in Boxify(gcg.Recaps.Mlb.Headline,WordWrap(gcg.Recaps.Mlb.Blurb, 75),1,120,120)){Console.WriteLine(s);} 
+
+            ConsoleLineFill("", consoleWidth);
+            string[] info = {string.Format("{0} is now {1}-{2} and are {3} games back", l.Home_team_city, l.Home_win, l.Home_loss, l.Home_games_back),
+                            string.Format("{0} is now {1}-{2} and are {3} games back", l.Away_team_city, l.Away_win, l.Away_loss, l.Away_games_back)};
+            foreach(string s in Boxify("",info,1,120,120)){Console.WriteLine(s);};
+            ConsoleLineFill(str, consoleWidth);
 
             //Batting
             foreach(var bTeam in boxscore.Batting)
@@ -212,20 +217,17 @@ namespace Ballgame
                 Console.WriteLine(str);
                 str= "└────────────────────────────────────────────────────────────┘";
                 Console.WriteLine(str);
-            }
-            
-            ConsoleLineFill("", consoleWidth);
-            str = string.Format("{0} is now {1}-{2} and are {3} games back", l.Home_team_city, l.Home_win, l.Home_loss, l.Home_games_back);
-            ConsoleLineFill(str, consoleWidth);
-            str = string.Format("{0} is now {1}-{2} and are {3} games back", l.Away_team_city, l.Away_win, l.Away_loss, l.Away_games_back);
-            ConsoleLineFill(str, consoleWidth);
+            } 
 
+            
             Console.SetWindowPosition(0,0);
         }
 
-        public static void DisplayStatus(LinescoreGame linescore)
+        public static void DisplayStatus(LinescoreGame linescore,GameEvents events)
         {
             string outStr = "";
+            string currentInning="";
+            bool top =false;
             outStr = string.Format(@"            [{0}]           Batting: {1} ({2})", (linescore.Runner_on_2b ?? "").Length > 0 ? "*" : " ",
                      linescore.Current_batter.First_name + " " + linescore.Current_batter.Last_name, linescore.Current_batter.Avg);
             ConsoleLineFill(outStr, consoleWidth);
@@ -244,12 +246,35 @@ namespace Ballgame
             ConsoleLineFill(outStr, consoleWidth);
 
             ConsoleLineFill("", consoleWidth);
+            outStr = "Last pitch:";
+            ConsoleLineFill(outStr, consoleWidth);
+            if(linescore.Inning_state=="Top")
+            {
+                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Top.Atbat.Last().Pitch.Last().Pitch_type;
+                ConsoleLineFill(outStr, consoleWidth);
+                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Top.Atbat.Last().Pitch.Last().Start_speed;
+                ConsoleLineFill(outStr, consoleWidth);
+                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Top.Atbat.Last().Des;
+                ConsoleLineFill(outStr, consoleWidth);
+            }
+            else{
+                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Bottom.Atbat.Last().Pitch.Last().Pitch_type;
+                ConsoleLineFill(outStr, consoleWidth);
+                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Bottom.Atbat.Last().Pitch.Last().Start_speed;
+                ConsoleLineFill(outStr, consoleWidth);
+                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Bottom.Atbat.Last().Des;
+                ConsoleLineFill(outStr, consoleWidth);
+            }
+
+
+            /* 
+            ConsoleLineFill("", consoleWidth);
             outStr = "Last play:";
             ConsoleLineFill(outStr, consoleWidth);
 
             outStr = linescore.Pbp_last;
             ConsoleLineFill(outStr, consoleWidth);
-            ConsoleLineFill("", consoleWidth);
+            ConsoleLineFill("", consoleWidth);*/
 
             outStr = "Last Update: " + DateTime.Now.ToString();
             ConsoleLineFill(outStr, consoleWidth);
@@ -259,16 +284,13 @@ namespace Ballgame
         {
             DisplayHeader(linescore);
             Console.WriteLine();
-            Console.WriteLine(gcg.Previews.Mlb.Headline.ToUpper());
-            Console.WriteLine(gcg.Previews.Mlb.Blurb);
+            foreach(string s in Boxify((gcg.Previews.Mlb.Headline ?? "".ToUpper()), WordWrap(gcg.Previews.Mlb.Blurb,100),1,120,100)){Console.WriteLine(s);}
+
             Console.WriteLine();
-            Console.WriteLine(linescore.Home_team_name);
-            Console.WriteLine(gcg.Probables.Home.RosterDisplayName.ToUpper());
-            Console.WriteLine(gcg.Probables.Home.Report);
+            foreach(string s in Boxify(linescore.Home_team_name,WordWrap(gcg.Probables.Home.Report,100),1,120,100)){Console.WriteLine(s);}
+
             Console.WriteLine();
-            Console.WriteLine(linescore.Away_team_name);
-            Console.WriteLine(gcg.Probables.Away.RosterDisplayName.ToUpper());
-            Console.WriteLine(gcg.Probables.Away.Report);
+            foreach(string s in Boxify(linescore.Away_team_name,WordWrap(gcg.Probables.Away.Report,100),1,120,100)){Console.WriteLine(s);}
         }
         public static void DisplayHeader(LinescoreGame linescore)
         {
@@ -280,25 +302,20 @@ namespace Ballgame
             header = string.Format("{0}  @  {1}", linescore.Away_team_name, linescore.Home_team_name);
             Console.WriteLine(figlet.ToAscii(header));
             
+            //string[] info = {linescore.Venue+", "+linescore.Location,linescore.Time+linescore.Time_zone};
+            //foreach(string s in Boxify("Venue", info,1,120,120))
+            //{
+            //    Console.WriteLine(s);
+            //}
+            
+
             Console.WriteLine(linescore.Venue+", "+linescore.Location+": "+linescore.Time+linescore.Time_zone);
 
         }
 
-        public static void ConsoleLineFill(string str, int windowWidth)
-        {
-            string emptySpace = "";
-            str = str ?? "";
-            for (int i = 0; i < (windowWidth - str.Length) - 2; i++)
-            {
-                emptySpace += " ";
-            }
-            str = str + emptySpace;
-            int j = str.Length;
-            Console.WriteLine(str);
-        }
-
         public static void DisplaySplash()
         {
+            Console.Clear();
             string str = @"                    
                                          .-----------------.                
                                       .------------------------.            
@@ -312,7 +329,7 @@ namespace Ballgame
                            `------------║      BALLGAME!      ║------------.       
                              `.---------║                     ║----------. 
                                `.-------║                     ║--------.     
-                                 `.-----║     v0.1.072417     ║------.      Another fine bit of software by 
+                                 `.-----║     v0.1.072817     ║------.      Another fine bit of software by 
                                    `.---╚═════════════════════╝ ---.        Matt Smith, a competent C#
                                      `.---                    --.'          developer available for hire. 
                                        `.--                 --.'             
@@ -327,7 +344,90 @@ namespace Ballgame
             Console.Clear();
 
         }
-        public static string GetInnings(string outs){
+
+        public static string[] Boxify(string title, string[] lines, int border, int maxWidth, int maxHeight)
+        {
+
+            string topLeft = (border==1) ? "┌":"╔";
+            string topRight = (border==1) ? "┐":"╗";
+            string horizontal = (border==1) ? "─":"═";
+            string vertical = (border==1) ? "│":"║";
+            string botLeft = (border==1) ? "└":"╚";
+            string botRight = (border==1) ? "┘":"╝";
+            
+            var sorted = lines.OrderBy(n => n.Length);
+            int longestLine = sorted.LastOrDefault().Length+2;
+            if (longestLine+4 > maxWidth) longestLine = maxWidth-4;
+            int numLines = lines.Count();
+            if (numLines+2 > maxHeight) numLines = maxHeight-2;
+
+            string[] str= new string[numLines+2];
+
+            string tempStr="";
+            
+            tempStr = topLeft+title;
+            for(int i =0;i<=longestLine-title.Length;i++){tempStr+=horizontal;}
+            tempStr+=topRight;
+            str[0]=tempStr;
+
+            
+            for(int j=0;j < numLines;j++)
+            {   
+                tempStr=vertical;
+                lines[j] = lines[j].PadLeft(lines[j].Length+1);
+                for(int i=0;i<lines[j].Length;i++){tempStr+=lines[j][i];}
+                tempStr=tempStr.PadRight(longestLine+2);
+                tempStr+=vertical;
+                str[j+1]=tempStr;
+            }
+            
+            tempStr = botLeft;
+            for(int i =0;i<=longestLine;i++){tempStr+=horizontal;}
+            tempStr+=botRight;
+            int k = str.Count()-1;
+            str[k]=tempStr;
+
+            return str;
+
+        }
+        
+        public static void ConsoleLineFill(string str, int windowWidth)
+        {
+            string emptySpace = "";
+            str = str ?? "";
+            for (int i = 0; i < (windowWidth - str.Length) - 2; i++)
+            {
+                emptySpace += " ";
+            }
+            str = str + emptySpace;
+            int j = str.Length;
+            Console.WriteLine(str);
+        }
+
+        public static string[] WordWrap(string line, int maxLength)
+        {
+            List<string> lines = new List<string>();
+            Queue<string> words = new Queue<string>(line.Split(' '));
+            
+            string tempStr="";
+
+            while(words.Count>0)
+            {   
+                if(tempStr.Length+words.Peek().Length < maxLength){
+                    tempStr += words.Dequeue()+" ";
+                }
+                else{
+                    lines.Add(tempStr);
+                    tempStr="";
+                }
+                
+            }
+            lines.Add(tempStr);
+            return lines.ToArray();
+        }
+
+        public static string GetInnings(string outs)
+        {
             string str=Math.Round((double.Parse(outs)/3.0), 1).ToString(); 
             if(str.Last()=='7'){str=str.Remove(str.Length -1, 1) + "2";}
             if(str.Last()=='3'){str=str.Remove(str.Length -1, 1) + "1";}

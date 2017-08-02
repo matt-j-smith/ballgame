@@ -2,6 +2,14 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <Version>0.1.07282017</Version>
+      <AssemblyVersion>1.0.0</AssemblyVersion>
+      <FileVersion>1.0.0</FileVersion>
+      <Company>MyCompany</Company>
+      <Authors>AuthorName</Authors>
+      <Product>ProductName</Product>
+ <Description />
+ <Copyright>Copyright © 2017</Copyright>
     <RuntimeIdentifiers>win10-x64;ubuntu.16.10-x64</RuntimeIdentifiers>
   </PropertyGroup>
   <ItemGroup>
