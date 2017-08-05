@@ -11,6 +11,8 @@ x64/
 build/
 [Bb]in/
 [Oo]bj/
+bin/
+obj/
 
 # NuGet Packages
 *.nupkg
