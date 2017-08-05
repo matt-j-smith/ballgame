@@ -137,7 +137,7 @@ namespace Ballgame
             DisplayLinescore(l);
             string str= "";
 
-            foreach(string s in Boxify(gcg.Recaps.Mlb.Headline,WordWrap(gcg.Recaps.Mlb.Blurb, 75),1,120,120)){Console.WriteLine(s);} 
+            foreach(string s in Boxify(gcg.Recaps.Mlb.Headline,WordWrap(gcg.Recaps.Mlb.Blurb, 60),1,120,120)){Console.WriteLine(s);} 
 
             ConsoleLineFill("", consoleWidth);
             string[] info = {string.Format("{0} is now {1}-{2} and are {3} games back", l.Home_team_city, l.Home_win, l.Home_loss, l.Home_games_back),
@@ -226,8 +226,24 @@ namespace Ballgame
         public static void DisplayStatus(LinescoreGame linescore,GameEvents events)
         {
             string outStr = "";
-            string currentInning="";
-            bool top =false;
+            string pitch,pitchSpeed,lastPlay ="";
+            int eventInning = (events.Inning.Count == linescore.Inning.Count() ? linescore.Inning.Count() : events.Inning.Count);
+            if(linescore.Inning_state=="Top")
+            {
+                //try{
+                pitch = events.Inning[eventInning]?.Top.Atbat.LastOrDefault()?.Pitch?.LastOrDefault()?.Pitch_type ?? "";
+                pitchSpeed = events.Inning[eventInning]?.Top.Atbat.LastOrDefault()?.Pitch?.LastOrDefault()?.Start_speed ?? "";
+                lastPlay = events.Inning[eventInning]?.Top.Atbat.LastOrDefault()?.Des ?? "";//}
+                //catch{};
+            }
+            else{
+                //try{
+                pitch = events.Inning[eventInning]?.Bottom.Atbat.LastOrDefault()?.Pitch?.LastOrDefault()?.Pitch_type ?? "";
+                pitchSpeed = events.Inning[eventInning]?.Bottom.Atbat.LastOrDefault()?.Pitch?.LastOrDefault()?.Start_speed ?? "";
+                lastPlay = events.Inning[eventInning]?.Bottom.Atbat.LastOrDefault()?.Des ?? "";//}
+                //catch{};
+            }
+            
             outStr = string.Format(@"            [{0}]           Batting: {1} ({2})", (linescore.Runner_on_2b ?? "").Length > 0 ? "*" : " ",
                      linescore.Current_batter.First_name + " " + linescore.Current_batter.Last_name, linescore.Current_batter.Avg);
             ConsoleLineFill(outStr, consoleWidth);
@@ -242,29 +258,11 @@ namespace Ballgame
             ConsoleLineFill(outStr, consoleWidth);
             outStr = string.Format(@"          \     /	  Pitching: {0} ({1} ERA)", linescore.Current_pitcher.First_name + " " + linescore.Current_pitcher.Last_name, linescore.Current_pitcher.Era);
             ConsoleLineFill(outStr, consoleWidth - 13);
-            outStr = string.Format(@"            [ ]");
+            outStr = string.Format(@"            [ ]           Last Pitch: {0} {1}mph", pitch,pitchSpeed );
             ConsoleLineFill(outStr, consoleWidth);
 
             ConsoleLineFill("", consoleWidth);
-            outStr = "Last pitch:";
-            ConsoleLineFill(outStr, consoleWidth);
-            if(linescore.Inning_state=="Top")
-            {
-                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Top.Atbat.Last().Pitch.Last().Pitch_type;
-                ConsoleLineFill(outStr, consoleWidth);
-                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Top.Atbat.Last().Pitch.Last().Start_speed;
-                ConsoleLineFill(outStr, consoleWidth);
-                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Top.Atbat.Last().Des;
-                ConsoleLineFill(outStr, consoleWidth);
-            }
-            else{
-                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Bottom.Atbat.Last().Pitch.Last().Pitch_type;
-                ConsoleLineFill(outStr, consoleWidth);
-                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Bottom.Atbat.Last().Pitch.Last().Start_speed;
-                ConsoleLineFill(outStr, consoleWidth);
-                outStr = events.Inning[Int32.Parse(linescore.Inning)-1].Bottom.Atbat.Last().Des;
-                ConsoleLineFill(outStr, consoleWidth);
-            }
+            foreach(string s in Boxify("Last Play",WordWrap(lastPlay,60),1,100,100)){ConsoleLineFill(s,consoleWidth);}
 
 
             /* 
@@ -301,14 +299,7 @@ namespace Ballgame
 
             header = string.Format("{0}  @  {1}", linescore.Away_team_name, linescore.Home_team_name);
             Console.WriteLine(figlet.ToAscii(header));
-            
-            //string[] info = {linescore.Venue+", "+linescore.Location,linescore.Time+linescore.Time_zone};
-            //foreach(string s in Boxify("Venue", info,1,120,120))
-            //{
-            //    Console.WriteLine(s);
-            //}
-            
-
+        
             Console.WriteLine(linescore.Venue+", "+linescore.Location+": "+linescore.Time+linescore.Time_zone);
 
         }
