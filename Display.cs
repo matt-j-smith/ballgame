@@ -227,7 +227,7 @@ namespace Ballgame
         {
             string outStr = "";
             string pitch,pitchSpeed,lastPlay ="";
-            int eventInning = (events.Inning.Count == linescore.Inning.Count() ? linescore.Inning.Count() : events.Inning.Count);
+            int eventInning = (events.Inning.Count == linescore.Inning.Count() ? linescore.Inning.Count()-1 : events.Inning.Count-1);
             if(linescore.Inning_state=="Top")
             {
                 //try{
@@ -263,7 +263,9 @@ namespace Ballgame
 
             ConsoleLineFill("", consoleWidth);
             foreach(string s in Boxify("Last Play",WordWrap(lastPlay,60),1,100,100)){ConsoleLineFill(s,consoleWidth);}
-
+            ConsoleLineFill("", consoleWidth);
+            ConsoleLineFill("", consoleWidth);
+            ConsoleLineFill("", consoleWidth);
 
             /* 
             ConsoleLineFill("", consoleWidth);
@@ -301,6 +303,7 @@ namespace Ballgame
             Console.WriteLine(figlet.ToAscii(header));
         
             Console.WriteLine(linescore.Venue+", "+linescore.Location+": "+linescore.Time+linescore.Time_zone);
+            if(linescore.Status =="Final"){Console.WriteLine("FINAL");};
 
         }
 
