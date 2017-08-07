@@ -10,7 +10,7 @@
       <Product>ProductName</Product>
  <Description />
  <Copyright>Copyright © 2017</Copyright>
-    <RuntimeIdentifiers>win10-x64;ubuntu.16.10-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win10-x64;osx.10.11-x64;ubuntu.16.10-x64</RuntimeIdentifiers>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
@@ -18,5 +18,11 @@
     <PackageReference Include="System.Net.http" Version="4.3.2" />
     <PackageReference Include="System.Threading.Timer" Version="4.3.0" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+
+    <None Include="Fonts/CalvinS.flf" CopyToOutputDirectory="Always" />
+    <None Include="Extras/Windows/ConsoleAudioStreamPlayer.exe" CopyToOutputDirectory="Always" />
+    <None Include="Extras/Windows/NAudio.dll" CopyToOutputDirectory="Always" />
+    <None Include="Extras/Windows/NAudio.xml" CopyToOutputDirectory="Always" />
+    <None Include="Extras/nix/mplayerstream.sh" CopyToOutputDirectory="Always" />
   </ItemGroup>
 </Project>
