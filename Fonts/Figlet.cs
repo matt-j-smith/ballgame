@@ -18,7 +18,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
-using System.Drawing;
+//using System.Drawing;
 
 namespace Ballgame
 {
@@ -49,7 +49,7 @@ namespace Ballgame
             int stringWidth = GetStringWidth(font, value);
             char[,] characterGeometry = new char[font.Height + 1, stringWidth];
             int[,] characterIndexGeometry = new int[font.Height + 1, stringWidth];
-            Color[,] colorGeometry = new Color[font.Height + 1, stringWidth];
+            //Color[,] colorGeometry = new Color[font.Height + 1, stringWidth];
 
             for (int line = 1; line <= font.Height; line++)
             {
@@ -72,7 +72,7 @@ namespace Ballgame
             StyledString styledString = new StyledString(value, stringBuilder.ToString());
             styledString.CharacterGeometry = characterGeometry;
             styledString.CharacterIndexGeometry = characterIndexGeometry;
-            styledString.ColorGeometry = colorGeometry;
+            //styledString.ColorGeometry = colorGeometry;
 
             return styledString;
         }
