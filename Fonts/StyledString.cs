@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Drawing;
+//using System.Drawing;
 
 namespace Ballgame
 {
@@ -47,7 +47,7 @@ namespace Ballgame
         /// A matrix of colors that corresponds to each concrete character in the StyledString.
         /// Dimensions are [row, column].
         /// </summary>
-        public Color[,] ColorGeometry { get; set; }
+       // public Color[,] ColorGeometry { get; set; }
 
         /// <summary>
         /// A matrix of concrete characters that corresponds to each concrete character in the StyledString.
