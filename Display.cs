@@ -292,7 +292,7 @@ namespace Ballgame
         }
         public static void DisplayHeader(LinescoreGame linescore)
         {
-            FigletFont font = FigletFont.Load("fonts/CalvinS.flf");
+            FigletFont font = FigletFont.Load(System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs()[0])+ "/fonts/CalvinS.flf");
             Figlet figlet = new Figlet(font);
 
             string header = "";
