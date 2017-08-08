@@ -62,16 +62,9 @@ namespace Ballgame
 
         public static void DisplayGameData(Object stateInfo, Game game, LinescoreGame line_score, Boxscore boxscore, GameEvents events, GameCenterGame gcg)
         {
-            //Console.Clear();
-
-
             string outStr = "";
             if (line_score.Status == "Final" || line_score.Status == "Game Over")
             {   
-                //Console.Clear();
-                //DisplayLinescore(line_score);
-                //ConsoleLineFill(line_score.Status, consoleWidth);
-                
                 Console.Clear();
                 Display.DisplayFinal(game, boxscore, line_score, gcg);
             }
@@ -292,7 +285,7 @@ namespace Ballgame
         }
         public static void DisplayHeader(LinescoreGame linescore)
         {
-            FigletFont font = FigletFont.Load(System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs()[0])+ "/fonts/CalvinS.flf");
+            FigletFont font = FigletFont.Load(System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + "/fonts/CalvinS.flf");
             Figlet figlet = new Figlet(font);
 
             string header = "";

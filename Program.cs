@@ -8,11 +8,12 @@ namespace Ballgame
 class Program
     {
         private static DataFetch df = new DataFetch();
-        
+        private static Timer timer;
         static void Main(string[] args)
         {
             
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.WindowWidth=120;
             Display.DisplaySplash();
 
             Game game = new Game();
@@ -38,18 +39,10 @@ class Program
                         }
                     case "n":
                         {
-                            //if (selectedDate < DateTime.Today) {
                                 selectedDate = selectedDate.AddDays(1);
-                             //   games = df.GetGames(selectedDate);
-                            //    Display.DisplayGames(games,selectedDate);
-                            //    i = Console.ReadLine();
-                           // }
-                            //else
-                            //{
                                 games = df.GetGames(selectedDate);
                                 Display.DisplayGames(games,selectedDate);
                                 i = Console.ReadLine();
-                           // }
                             break;
                         }
                     default:
@@ -62,10 +55,11 @@ class Program
                                 {
                                     DisplayAudioMenu(game); 
                                     var autoEvent = new AutoResetEvent(false);
-                                    Timer timer = new Timer(x =>Display.DisplayGameData(x,game, df.GetLinescore(game.Game_data_directory),
+                                    timer = new Timer(x =>Display.DisplayGameData(x,game, df.GetLinescore(game.Game_data_directory),
                                                                                                 df.GetBoxscore(game.Game_data_directory),
                                                                                                 df.GetGameEvents(game.Game_data_directory),
                                                                                                 df.GetGameCenterGame(game.Game_data_directory)),autoEvent,0,30000);
+                                 GC.KeepAlive(timer);
                                 }
                                 else if (game.Status=="Final")
                                 {
@@ -111,7 +105,7 @@ class Program
             }
             else if (response == "h")
             {
-                PlayRadio(game.Home_team_name,environment);
+                PlayRadio(game.Home_team_name, environment);
 
             }
             Console.Clear();
@@ -121,16 +115,16 @@ class Program
         static public void PlayRadio(string teamName, string environment)
         {
             if(environment=="Windows"){
-                if(System.IO.File.Exists(@"Extras\Windows\ConsoleAudioStreamPlayer.exe")){
+                if(System.IO.File.Exists(System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + @"\Extras\Windows\ConsoleAudioStreamPlayer.exe")){
                     Process.Start(@"Extras\Windows\ConsoleAudioStreamPlayer.exe",teamName.Replace(" ","").ToLower());
                 }
-                else{Console.WriteLine(@"Extras\Windows\ConsoleAudioStreamPlayer.exe not found");}
+                else{Console.WriteLine(System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + @"\Extras\Windows\ConsoleAudioStreamPlayer.exe");}
                 }
             if(environment=="Unix"){
-                if(System.IO.File.Exists(@"Extras\Nix\mplayerstream.sh")){
+                if(System.IO.File.Exists(System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + @"\Extras\nix\mplayerstream.sh")){
                     Process.Start(@"sh mplayerstream.sh",teamName.Replace(" ","").ToLower());
                 }
-                else{Console.WriteLine(@"Extras\Nix\mplayerstream.sh Not Found");}
+                else{Console.WriteLine(System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + @"\Extras\nix\mplayerstream.sh Not Found");}
                 }
             }
         } 

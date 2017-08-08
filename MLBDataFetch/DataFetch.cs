@@ -40,6 +40,7 @@ namespace Ballgame
         {
             return sync.SyncGameEvents(gameDir);
         }
+        
         //public List<Event> GetEvents(string gameDir)
         //{
         //    eventLog = sync.SyncEventLog(gameDir);

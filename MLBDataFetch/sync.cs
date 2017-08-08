@@ -22,7 +22,8 @@ namespace Ballgame
             try{
                 return (Games)serializer.Deserialize(new StringReader(xml));  
             }
-            catch{
+            catch(Exception e){
+                Console.WriteLine(e.Message);
                 return new Games();
             }
              
@@ -35,7 +36,8 @@ namespace Ballgame
             try{
                 return (LinescoreGame)serializer.Deserialize(new StringReader(xml));
             }
-            catch{
+            catch(Exception e){
+                Console.WriteLine(e.Message);
                 return new LinescoreGame();
             }
         }
@@ -47,7 +49,8 @@ namespace Ballgame
             try{
                return (Boxscore)serializer.Deserialize(new StringReader(xml)); 
             }
-            catch{
+            catch(Exception e){
+                Console.WriteLine(e.Message);
                 return new Boxscore();
             }
         }
@@ -59,7 +62,8 @@ namespace Ballgame
                 try{
                     return (GameCenterGame)serializer.Deserialize(new StringReader(xml));
                 }
-                catch{
+                catch(Exception e){
+                    Console.WriteLine(e.Message);
                     return new GameCenterGame();
                 }
         }
@@ -71,7 +75,8 @@ namespace Ballgame
                 try{
                     return (GameEvents)serializer.Deserialize(new StringReader(xml));
                 }
-                catch{
+                catch(Exception e){
+                    Console.WriteLine(e.Message);
                     return new GameEvents();
                 }
         }
@@ -125,7 +130,6 @@ namespace Ballgame
                 Console.WriteLine("Network Error: "+e.Message);
                 return responseString;
             }
-
         }
     }
 }
