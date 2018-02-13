@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace Ballgame
 {
 class Program
-    {
+    { 
         private static DataFetch df = new DataFetch();
         private static Timer timer;
         static void Main(string[] args)
